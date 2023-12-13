@@ -12,7 +12,7 @@ import java.net.http.HttpResponse;
 import java.net.http.HttpRequest;
 
 public class CepUtil {
-    public Endereco getCep(int cep) {
+    public Endereco getEndereco(String cep) {
         String uri = "https://viacep.com.br/ws/" + cep + "/json/";
         try {
             HttpRequest request = HttpRequest
@@ -28,9 +28,9 @@ public class CepUtil {
             }
             ObjectMapper objectMapper = new ObjectMapper();
             Endereco endereco = objectMapper.readValue(response.body(), Endereco.class);
-            if(endereco.isErro()){
-                throw new ResourceNotFoundException();
-            }
+//            if(endereco.isErro()){
+//                throw new ResourceNotFoundException();
+//            }
             return endereco;
         } catch (URISyntaxException | IOException | InterruptedException e) {
             throw new RuntimeException(e);
