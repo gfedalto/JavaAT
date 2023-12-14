@@ -4,6 +4,8 @@ import com.example.javaAT.exceptions.ResourceNotFoundException;
 import com.example.javaAT.models.CotacaoDolar;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URI;
@@ -16,6 +18,7 @@ import java.time.format.DateTimeFormatter;
 
 public class DolarUtil {
 
+    Logger looger = LoggerFactory.getLogger(DolarUtil.class);
     public CotacaoDolar getDolar() {
         LocalDate hoje = LocalDate.now();
         DateTimeFormatter formatador = DateTimeFormatter.ofPattern("MM-dd-yyyy");
@@ -32,10 +35,10 @@ public class DolarUtil {
                     .build();
             HttpClient client = HttpClient.newBuilder().build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            looger.info("retorno da requisição DolarUtil: " + response.statusCode());
             if(response.statusCode() == 404){
                 throw new ResourceNotFoundException();
             }
-
             JsonNode cotacaoNode = new ObjectMapper().readTree(response.body());
 
             CotacaoDolar cotacaoDolar = new CotacaoDolar();
